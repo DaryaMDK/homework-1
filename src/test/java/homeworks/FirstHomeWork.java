@@ -1,53 +1,62 @@
 package homeworks;
 
+import com.codeborne.selenide.CollectionCondition;
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
-
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 
 public class FirstHomeWork {
 
     @BeforeEach
     void start() {
-        Configuration.startMaximized = true;
+//        Configuration.startMaximized = true;
+        Configuration.browserSize = "1920x1080";
         open("https://demoqa.com/automation-practice-form");
     }
-
     @Test
     void checkForms() {
 
-        $("\t#firstName").setValue("Darya");
-        $("\t#lastName").setValue("Miloradova");
-        $("\t#userEmail").setValue("d.miloradov@mail.ru");
+        $("#firstName").setValue("Darya");
+        $("#lastName").setValue("Miloradova");
+        $("#userEmail").setValue("d.miloradov@mail.ru");
 
-        $("[for='gender-radio-3]").click();
+        $("#genterWrapper").$(byText("Female")).click();
         $("#userNumber").setValue("89999999999");
 
-        $x("//*[@id='dateOfBirthInput']").click();
-        $x("//*[normalize-space()='29']").click();
+        $("#dateOfBirthInput").click();
+        $("[class='react-datepicker__month-select']").selectOption("July");
+        $("[class='react-datepicker__year-select']").selectOption("1994");
+        $("[class*='react-datepicker__day--010']").click();
 
         $("#subjectsInput").setValue("Biology").pressEnter();
         $("#subjectsInput").setValue("Commerce").pressEnter();
 
-        $x("//label[normalize-space()='Music']").click();
+        $("#hobbiesWrapper").$(byText("Music")).click();
 
-        File file = new File("src/test/java/resources/pozitivnye_kartinki_2.jpg");
-        $("input[id='uploadPicture']").uploadFile(file);
+        $("input[id='uploadPicture']").uploadFromClasspath("pozitivnye_kartinki_2.jpg");
 
-        $("#currentAddress").setValue("Moscow, street New, 1");
-
+        $("#currentAddress").setValue("Moscow street 1");
 
         $("#react-select-3-input").setValue("NCR").pressEnter();
         $("#react-select-4-input").setValue("Delhi").pressEnter();
-        $x("#submit").click();
-    }
+        $("#submit").click();
 
-    @AfterEach
-    void close() {
-        closeWebDriver();
+
+        $(".modal-content").shouldHave(
+                text("Darya Miloradova"),
+                text("d.miloradov@mail.ru"),
+                text("Female"),
+                text("89999999999"),
+                text("10 July,1994"),
+                text("Biology Commerce"),
+                text("Music"),
+                text("pozitivnye_kartinki_2.jpg"),
+                text("Moscow street 1"),
+                text("NCR Delhi"));
     }
 }
