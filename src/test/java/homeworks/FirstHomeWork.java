@@ -1,7 +1,5 @@
 package homeworks;
 
-import com.codeborne.selenide.CollectionCondition;
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +24,7 @@ public class FirstHomeWork {
         $("#userEmail").setValue("d.miloradov@mail.ru");
 
         $("#genterWrapper").$(byText("Female")).click();
-        $("#userNumber").setValue("89999999999");
+        $("#userNumber").setValue("8999999999");
 
         $("#dateOfBirthInput").click();
         $("[class='react-datepicker__month-select']").selectOption("July");
@@ -46,14 +44,13 @@ public class FirstHomeWork {
         $("#react-select-4-input").setValue("Delhi").pressEnter();
         $("#submit").click();
 
-
         $(".modal-content").shouldHave(
                 text("Darya Miloradova"),
                 text("d.miloradov@mail.ru"),
                 text("Female"),
-                text("89999999999"),
+                text("8999999999"),
                 text("10 July,1994"),
-                text("Biology Commerce"),
+                text("Biology, Commerce"),
                 text("Music"),
                 text("pozitivnye_kartinki_2.jpg"),
                 text("Moscow street 1"),
