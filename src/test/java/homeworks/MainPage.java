@@ -1,6 +1,7 @@
 package homeworks;
 
 import com.codeborne.selenide.Configuration;
+import com.github.javafaker.Faker;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,16 +9,22 @@ import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 
-public class FirstHomeWork {
+public class MainPage {
 
     @BeforeEach
     void start() {
-//        Configuration.startMaximized = true;
-        Configuration.browserSize = "1920x1080";
+        Configuration.startMaximized = true;
         open("https://demoqa.com/automation-practice-form");
     }
+
     @Test
     void checkForms() {
+
+        Faker faker = new Faker();
+        String firstName = faker.name().firstName();
+        String lastName = faker.name().lastName();
+        String email = faker.internet().emailAddress();
+        String phoneNumber = faker.number().digits(10);
 
         $("#firstName").setValue("Darya");
         $("#lastName").setValue("Miloradova");
@@ -26,22 +33,16 @@ public class FirstHomeWork {
         $("#genterWrapper").$(byText("Female")).click();
         $("#userNumber").setValue("8999999999");
 
-        $("#dateOfBirthInput").click();
-        $("[class='react-datepicker__month-select']").selectOption("July");
-        $("[class='react-datepicker__year-select']").selectOption("1994");
-        $("[class*='react-datepicker__day--010']").click();
+        Calendar calendar = new Calendar();
+        calendar.chooseCalendar();
 
-        $("#subjectsInput").setValue("Biology").pressEnter();
-        $("#subjectsInput").setValue("Commerce").pressEnter();
-
-        $("#hobbiesWrapper").$(byText("Music")).click();
+        Interests interests = new Interests();
+        interests.setInterests();
 
         $("input[id='uploadPicture']").uploadFromClasspath("pozitivnye_kartinki_2.jpg");
 
-        $("#currentAddress").setValue("Moscow street 1");
-
-        $("#react-select-3-input").setValue("NCR").pressEnter();
-        $("#react-select-4-input").setValue("Delhi").pressEnter();
+        AddresInformation addresInformation = new AddresInformation();
+        addresInformation.enterAddresInfo();
         $("#submit").click();
 
         $(".modal-content").shouldHave(
